@@ -35,7 +35,7 @@ the test test file is in the program directory
 ### Windows CMD
 
 ```cmd
-C:\PokerHandSorter> type poker-hands.txt | dotnet run
+C:\PokerHandSorter>type poker-hands.txt | dotnet run
 ```
 
 ### Powershell

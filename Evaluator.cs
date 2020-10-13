@@ -4,26 +4,16 @@ using System.Linq;
 
 namespace PokerHandSorter
 {
-    /*Rank
-     * ACE = 12, King = 11, Queen = 10, Jack = 9, 10 = 8,
-     * 9 = 7, 8 = 6, 7 = 5, 6 = 4, 5 = 3, 4 = 2, 3 = 1, 2 = 0
-     *
-     *Value of cards
-     * Rank	    2	3	4	5	6	7	8	9	10	J	Q	K	A
-     * Prime	2	3	5	7	11	13	17	19	23	29	31	37	41
-     *
-     * Diamonds = 0  * Hearts = 1  * Spades = 2   * Clubs = 3
-     *
-     * Royal F = 41x37x31x29x23 = 31,367,009 * King High F = 37x31x29x23x19 = 14,535,931  * Queen High F= 31x29x23x19x17 = 6,678,671
-     * Jack High F= 29x23x19x17x13 = 2,800,733  * 10 High F = 23x19x17x13x11 = 1,062,347  * 9 High F = 19x17x13x11x7 = 323,323
-     * 8 High F = 17x13x11x7x5 = 85,085   * 7 High F = 13x11x7x5x3 = 15,015   * 6 High F = 11x7x5x3x2 = 2,310
-     */
-    
+
     class Evaluator
     {
         private int _handRank;
         private int _highCard;
-
+        /// <summary>
+        /// Checks with occurrences and sets rank accordingly
+        /// </summary>
+        /// <param name="cards"></param>
+        /// <returns></returns>
         public int[] GetHighestRank(string cards)
         {
             var (values, suites) = CardValue.ConvertHand(cards);
@@ -74,14 +64,24 @@ namespace PokerHandSorter
 
 
 
-
+        /// <summary>
+        /// Setting Rank and High Card
+        /// </summary>
+        /// <param name="distinctValueOccurence"> To find the high card value</param>
+        /// <param name="count"> Depends on the rank.</param>
+        /// <param name="max"> For High Card & Two Pair, it is true</param>
+        /// <param name="rank">Rank found in RankSorter</param>
         private void SetRankHighCard(Dictionary<int, int> distinctValueOccurence, int count, bool max, int rank)
         {
             _highCard = !max ? distinctValueOccurence.FirstOrDefault(x => x.Value == count).Key : distinctValueOccurence.Where(x => x.Value == count).Select(y => y.Key).Max();
 
             _handRank = rank;
         }
-
+        /// <summary>
+        /// Find duplicate values of cards.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         private (Dictionary<int, int>, int, int) DistinctValueOccurence(int[] values)
         {
             var distinctValueOccurence = values.GroupBy(n => n)
@@ -93,7 +93,11 @@ namespace PokerHandSorter
 
 
         /// <summary>
-        /// Checks if rank is 10, 9 or 5 or 6
+        /// Checks if rank is 9 or 5 or 6
+        /// As Royal Flush is rare, highest value is 9. If both are 9, highest card is checked.
+        /// Checked against the product of the card values,
+        /// which are prime numbers. If it is in compositeValueRank Array, it is either 9 or 6
+        /// Otherwise, it can be either flush or returns a negative number.
         /// </summary>
         /// <param name="values"></param>
         /// <param name="distinctCount"></param>
