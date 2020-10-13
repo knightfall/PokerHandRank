@@ -1,4 +1,4 @@
-# Poker hand Sorter
+# Poker Hand Sorter
 
 Simple poker evaluator.
 
