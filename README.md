@@ -30,7 +30,7 @@ As this repo doesn't come with a compiled version, you will have to install .NET
 ## Running the program
 
 In the directory of the program, execute the command below. the command below assumes
-the test file is in the program directory..
+the test file is in the program directory.
 
 ### Windows CMD
 
