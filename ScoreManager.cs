@@ -82,10 +82,28 @@ namespace PokerHandSorter
                 var playerTwoValue = CardValue.ConvertHandValue(playerTwoHand);
                 playerOneValue = CardValue.RemoveValues(playerOneValue, playerOneMax);
                 playerTwoValue = CardValue.RemoveValues(playerTwoValue, playerTwoMax);
+                if (GetNextHighCard(playerOneValue,2) == GetNextHighCard(playerTwoValue,2))
+                {
+                    playerOneValue = CardValue.RemoveValues(playerOneValue, GetNextHighCard(playerOneValue,2));
+                    playerTwoValue = CardValue.RemoveValues(playerTwoValue, GetNextHighCard(playerTwoValue,2));
+                    if (playerOneValue[0] == playerTwoValue[0])
+                    {
+                        return Tie;
+                    }
+                    CalculateScore(playerOneValue[0], playerTwoValue[0]);
+                }
                 return playerOneValue[0] == playerTwoValue[0] ? Tie : CalculateScore(playerOneValue[0], playerTwoValue[0]);
             }
 
             return CalculateScore(playerOneMax, playerTwoMax);
+        }
+
+        private static int GetNextHighCard(int[] values, int occurance)
+        {
+            return values.GroupBy(n => n)
+                .Select(n => new
+                    { n.Key, Value = n.Count() })
+                .ToDictionary(o => o.Key, o => o.Value).FirstOrDefault(x => x.Value == occurance).Key;
         }
     }
 

@@ -82,7 +82,7 @@ namespace PokerHandSorter
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
-        private (Dictionary<int, int>, int, int) DistinctValueOccurence(int[] values)
+        private static (Dictionary<int, int>, int, int) DistinctValueOccurence(int[] values)
         {
             var distinctValueOccurence = values.GroupBy(n => n)
                 .Select(n => new
